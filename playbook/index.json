@@ -1,0 +1,26 @@
+{
+  "last_distilled_at": "2026-06-05T08:00:00Z",
+  "total_cases": 4,
+  "processed": {
+    "jira": {
+      "ADQA-1388": "2026-06-05T08:00:00Z",
+      "ADQA-1466": "2026-06-05T08:00:00Z",
+      "ADQA-1525": "2026-06-05T08:00:00Z",
+      "ADQA-1529": "2026-06-05T08:00:00Z"
+    },
+    "slack_threads": {
+      "1733706003.378719": "2026-06-05T08:00:00Z",
+      "1742192967.352389": "2026-06-05T08:00:00Z",
+      "1748229782.392559": "2026-06-05T08:00:00Z",
+      "1749534329.702809": "2026-06-05T08:00:00Z"
+    }
+  },
+  "channels": [
+    {"name": "qa-crossx-newcomer", "id": "C02UBHUKBPW"},
+    {"name": "廣告刷整排刷起來", "id": "C04NU2ZM4BD"},
+    {"name": "jp_rakuten-ichiba_squad", "id": "C084QJC5L77"},
+    {"name": "coupang-squad-20211", "id": "C02MS6A951Q"},
+    {"name": "aictivate-squad-2025", "id": "C085M07RTRQ"},
+    {"name": "coupang-tw-squad-202410", "id": "C07T31CPCMU"}
+  ]
+}

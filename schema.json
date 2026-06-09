@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ADQA Knowledge Case",
+  "description": "Schema for distilled ADQA investigation cases. Source of truth for brew and ask skills.",
+
+  "required_fields": [
+    "pattern_id",
+    "symptom.signature",
+    "symptom.funnel_stage",
+    "root_cause.summary",
+    "root_cause.confidence",
+    "status",
+    "provenance.thread_refs",
+    "provenance.as_of"
+  ],
+
+  "best_effort_fields": [
+    "symptom.scope_tags.ssp",
+    "symptom.observable_signals",
+    "symptom.metric",
+    "root_cause.category",
+    "resolution.fix",
+    "resolution.verified_by",
+    "recurrence.count",
+    "provenance.confluence.status",
+    "last_mentioned"
+  ],
+
+  "example": {
+    "pattern_id": "qa-crossx-newcomer-bid-algorix-companion-filter-a3f9c1",
+
+    "symptom": {
+      "signature": "Algorix 第一方流量全部 no bid",
+      "funnel_stage": ["Bid"],
+      "pipeline_layer": "L6 SSP SDK",
+      "metric": "bid_rate",
+      "observable_signals": [
+        "imp_join_all2 有 request，無 win",
+        "diagnose_v2 顯示 companion_type filter"
+      ],
+      "scope_tags": {
+        "ssp": ["Algorix"],
+        "os": ["AOS"],
+        "region": [],
+        "dc": []
+      }
+    },
+
+    "root_cause": {
+      "summary": "Algorix 第一方 bid request companion_types 為空，VAST Video 全被 filter",
+      "category": "upstream-ssp",
+      "confidence": "confirmed",
+      "linked_change": { "type": "ssp-behavior", "ref": "" }
+    },
+
+    "resolution": {
+      "fix": "改用 Dynamic Video 取代 VAST Video 在 Algorix 第一方流量",
+      "verified_by": "切換後有 win/show",
+      "note": null,
+      "ttr_minutes": null
+    },
+
+    "status": "resolved",
+    "has_workaround": false,
+
+    "recurrence": {
+      "count": 1,
+      "first_seen": "2025-11",
+      "last_seen": "2025-11"
+    },
+
+    "last_mentioned": "2025-11",
+
+    "related_cases": [],
+
+    "notes": null,
+
+    "provenance": {
+      "source": "jira",
+      "thread_refs": [
+        "https://appier.atlassian.net/browse/ADQA-1664",
+        "https://appier.slack.com/archives/C02UBHUKBPW/p1779247742021589"
+      ],
+      "confluence": {
+        "status": "silent",
+        "urls": []
+      },
+      "as_of": "2025-11-18",
+      "distilled_by": "brew-skill@v1"
+    },
+
+    "volatile": {
+      "specific_values": ["companion_types: []", "bid_rate 0%"],
+      "ticket_ids": ["ADQA-1664"],
+      "dates": ["2025-11-13"]
+    }
+  },
+
+  "field_definitions": {
+    "pattern_id": {
+      "format": "{channel_slug}-{funnel_stage_lower}-{domain_slug}-{hash6}",
+      "hash_source": "primary source ID (Jira key or Slack thread_ts)",
+      "example": "qa-crossx-newcomer-bid-algorix-companion-filter-a3f9c1"
+    },
+    "funnel_stage": {
+      "type": "array",
+      "values": ["Traffic", "Bid", "Win-Show", "Click", "Action"],
+      "note": "Array. First element is root stage. Downstream affected stages follow.",
+      "edge_cases": {
+        "setup_config": "Use Traffic",
+        "multi_ssp_comparison": "Single case, differences in volatile.specific_values"
+      }
+    },
+    "confidence": {
+      "values": ["confirmed", "likely", "unverified"],
+      "note": "Use highest confirmed value when multiple SSPs have different confidence"
+    },
+    "status": {
+      "values": ["resolved", "recurring", "known-degradation", "by-design", "wontfix"],
+      "workaround": "resolved + has_workaround: true",
+      "by_design": "resolution.fix = null, resolution.note = explanation"
+    },
+    "category": {
+      "values": ["config-change", "deploy", "upstream-ssp", "data-bug", "known-degradation"]
+    },
+    "confluence_status": {
+      "values": ["aligned", "conflicts", "silent"]
+    },
+    "source": {
+      "values": ["slack", "jira", "jira+slack"]
+    }
+  }
+}

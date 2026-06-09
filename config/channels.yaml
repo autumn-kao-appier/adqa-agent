@@ -1,0 +1,34 @@
+channels:
+  - name: qa-crossx-newcomer
+    id: C02UBHUKBPW
+    description: ADQA QA task coordination and investigation channel
+    active: true
+
+  - name: 廣告刷整排刷起來
+    id: C04NU2ZM4BD
+    description: Ad testing coordination channel
+    active: true
+
+  - name: jp_rakuten-ichiba_squad
+    id: C084QJC5L77
+    description: Rakuten Japan squad
+    active: true
+
+  - name: coupang-squad-20211
+    id: C02MS6A951Q
+    description: Coupang squad operations
+    active: true
+
+  - name: aictivate-squad-2025
+    id: C085M07RTRQ
+    description: Aictivate squad
+    active: true
+
+  - name: coupang-tw-squad-202410
+    id: C07T31CPCMU
+    description: Coupang TW squad
+    active: true
+
+jira:
+  project: ADQA
+  jql_filter: "project = ADQA AND status = Done AND updated >= \"{last_distilled_at}\""
