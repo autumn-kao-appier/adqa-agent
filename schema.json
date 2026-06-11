@@ -19,6 +19,7 @@
     "symptom.observable_signals",
     "symptom.metric",
     "root_cause.category",
+    "root_cause.mechanism",
     "resolution.fix",
     "resolution.verified_by",
     "recurrence.count",
@@ -102,6 +103,11 @@
       "hash_source": "primary source ID (Jira key or Slack thread_ts)",
       "example": "qa-crossx-newcomer-bid-algorix-companion-filter-a3f9c1"
     },
+    "related_cases": {
+      "type": "array of objects",
+      "format": "[{\"key\": \"ADQA-XXXX\", \"url\": \"https://appier.atlassian.net/browse/ADQA-XXXX\"}]",
+      "note": "只收錄 Jira issuelinks 中明確設定的關聯票。key + url 都存，直接拿就有連結。"
+    },
     "funnel_stage": {
       "type": "array",
       "values": ["Traffic", "Bid", "Win-Show", "Click", "Action"],
@@ -121,7 +127,11 @@
       "by_design": "resolution.fix = null, resolution.note = explanation"
     },
     "category": {
-      "values": ["config-change", "deploy", "upstream-ssp", "data-bug", "known-degradation"]
+      "values": ["config-change", "deploy", "upstream-ssp", "appier-creative", "appier-pipeline", "data-bug", "known-degradation"]
+    },
+    "mechanism": {
+      "values": ["auto-click", "auto-redirect", "traffic-quality", "ssp-server-change", "macro-substitution", "bid-filter", "config-mismatch", "unknown"],
+      "note": "What kind of failure, regardless of who owns it. Pairs with category."
     },
     "confluence_status": {
       "values": ["aligned", "conflicts", "silent"]

@@ -1,65 +1,80 @@
-# adqa-knowledge-mcp
+# adqa-agent
 
-ADQA 知識庫 — 從 Slack 與 Jira 蒸餾的調查案例，可對話查詢。
-
-和 adqa-claude-kit 一樣的操作方式：呼叫 skill，Claude 直接回答。不需要 Python server。
+ADQA 知識庫。從 Slack 與 Jira 蒸餾的調查案例，用自然語言查詢。
 
 ---
 
-## 結構
+## 快速開始
+
+在 Claude Code 輸入：
 
 ```
-adqa-knowledge-base/
-  ├── playbook/
-  │   ├── cases.jsonl       ← 知識庫（每行一個案例）
-  │   └── index.json        ← 狀態（上次蒸餾時間、已處理來源）
-  ├── skills/
-  │   ├── ask/SKILL.md      ← 對話查詢
-  │   └── brew/SKILL.md     ← 蒸餾（too-long-to-read 上層）
-  ├── config/
-  │   └── channels.yaml     ← 監控的 Slack channel
-  ├── schema.json           ← Case schema（source of truth）
-  └── README.md
+/ask 最近 InMobi endcard 有什麼問題？
 ```
+
+不需要開 server、不需要設定。
 
 ---
 
-## 使用
+## `/ask` — 查詢
 
-**查詢：**
+直接問問題，Claude 搜尋知識庫回答。
+
 ```
-/ask 最近 Pangle endcard 有什麼問題？
+/ask Vungle deeplink 為什麼 open rate 突然掉？
+/ask Pangle KR auto-click 怎麼確認？
+/ask parallel ping 在哪些 SSP 有問題？
 ```
 
-**手動蒸餾：**
+**切換語氣 persona：**
+
+```
+/ask --as pineapple_wu InMobi 有沒有 endcard 亂碼的案例？
+```
+
+預設語氣是 Aiden Chen。可用的 persona：
+
+| `--as` 參數 | 特點 |
+|---|---|
+| `aiden_chen`（預設）| 直接給結論、定責任 |
+| `andy_yu` | 先背景再任務、分優先順序 |
+| `kochi_chuang` | 分步指引、務實縮小範圍 |
+| `howard_cheng` | pseudo-code 思維、numbered steps |
+| `pineapple_wu` | 整理後再說、票號配齊 |
+
+---
+
+## 如何快速查找
+
+知識庫的案例可以用以下維度搜尋，直接在問句裡提到就好：
+
+- **SSP**：`Vungle`、`Pangle`、`InMobi`、`Bidmachine`、`Google`、`Naver`...
+- **問題類型**：CTR 異常、open rate 下降、endcard 渲染、attribution 認列失敗...
+- **漏斗階段**：Traffic / Bid / Win-Show / Click / Action
+- **客戶 / 市場**：Coupang KR、Rakuten JP...
+- **關鍵字**：auto-click、deeplink、parallel ping、endcard、HTML entity...
+
+找不到答案時 `/ask` 會提示你執行 `/brew` 更新知識庫。
+
+---
+
+## 案例分類
+
+每個案例標記了以下欄位，回答時會一併說明：
+
+| 欄位 | 說明 |
+|---|---|
+| `root_cause.category` | `upstream-ssp` / `appier-creative` / `appier-pipeline` / `traffic-quality` 等 |
+| `root_cause.confidence` | `confirmed`（有實刷驗證）/ `likely`（推斷）/ `unverified` |
+| `status` | `resolved` / `known-degradation` / `recurring` |
+| `last_mentioned` | 最後在 Slack 出現的時間，超過 6 個月會提醒補驗 |
+
+---
+
+## `/brew` — 更新知識庫
+
+從 Slack 和 Jira 拉新案例進來。知識庫沒有答案時先跑一次：
+
 ```
 /brew
 ```
-
-**Scheduler：** 每天 09:00 自動跑 `/brew`。
-
----
-
-## Schema 設計原則
-
-- 包含 Pineapple Wu 的完整 schema，額外加上 `last_mentioned`
-- `funnel_stage` 為陣列，第一個是根源階段（Traffic / Bid / Win-Show / Click / Action）
-- `volatile` 欄位隔離具體數字/日期/ticket 號，不進 prompt cache 穩定層
-- `provenance.thread_refs` 含完整 URL（Jira + Slack），可追溯原始討論
-- 三層欄位：必填 / 盡力填（找不到填 null）/ 真的選填
-
-詳見 `schema.json`。
-
----
-
-## 知識新鮮度
-
-- Slack 是主要來源（Jira 上的票常常開了就放著）
-- `last_mentioned` 追蹤最近在 Slack 被提及的時間，判斷知識是否仍被使用
-- Brew 每天更新，確保知識庫同步最新已結案案例
-
----
-
-## 目前監控的 channel
-
-- `#qa-crossx-newcomer`（C02UBHUKBPW）
