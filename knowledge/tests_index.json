@@ -1,0 +1,35 @@
+{
+  "last_distilled_at": "2026-06-11T00:00:00Z",
+  "total_cases": 7,
+  "processed": {
+    "jira": {
+      "ADQA-1822": "2026-06-11T00:00:00Z",
+      "ADQA-1819": "2026-06-11T00:00:00Z",
+      "ADQA-1811": "2026-06-11T00:00:00Z",
+      "ADQA-1733": "2026-06-11T00:00:00Z",
+      "ADQA-1721": "2026-06-11T00:00:00Z",
+      "ADQA-1715": "2026-06-11T00:00:00Z",
+      "ADQA-1698": "2026-06-11T00:00:00Z"
+    },
+    "slack_threads": {}
+  },
+  "source": "jira-validation-tickets",
+  "jql": "project = ADQA AND (summary ~ \"Validating\" OR summary ~ \"實刷\" OR summary ~ \"驗證\" OR summary ~ \"QA test\") AND created >= \"2025-12-11\" ORDER BY created DESC",
+  "known_tickets": [
+    "ADQA-1830",
+    "ADQA-1823",
+    "ADQA-1822",
+    "ADQA-1819",
+    "ADQA-1811",
+    "ADQA-1754",
+    "ADQA-1733",
+    "ADQA-1721",
+    "ADQA-1716",
+    "ADQA-1715",
+    "ADQA-1698",
+    "ADQA-1687",
+    "ADQA-1685",
+    "ADQA-1684"
+  ],
+  "pending": ["ADQA-1830", "ADQA-1823", "ADQA-1754", "ADQA-1716", "ADQA-1687", "ADQA-1685", "ADQA-1684"]
+}
