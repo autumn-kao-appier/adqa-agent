@@ -15,6 +15,15 @@ REPO_ROOT = pathlib.Path(__file__).parent
 KNOWLEDGE_DIR = REPO_ROOT / "knowledge"
 THREADS_PATH = KNOWLEDGE_DIR / "threads.jsonl"
 TESTS_PATH = KNOWLEDGE_DIR / "tests.jsonl"
+PERSONAS_DIR = REPO_ROOT / "personas"
+DEFAULT_PERSONA = "aiden_chen"
+
+
+def _load_persona(name: str) -> str:
+    path = PERSONAS_DIR / name / "persona.md"
+    if path.exists():
+        return path.read_text()
+    return ""
 
 _cases: list[dict] = []
 _lock = threading.Lock()
@@ -119,8 +128,12 @@ def _fmt(case: dict) -> str:
 
 
 @mcp.tool()
-def search_knowledge(query: str) -> str:
-    """Search the ADQA knowledge base. Ask about SSP issues (Pangle, Mintegral, InMobi, Vungle...), CTR anomalies, deeplink problems, attribution failures, endcard bugs."""
+def search_knowledge(query: str, persona: Optional[str] = None) -> str:
+    """Search the ADQA knowledge base. Ask about SSP issues (Pangle, Mintegral, InMobi, Vungle...), CTR anomalies, deeplink problems, attribution failures, endcard bugs.
+
+    persona: optional tone guide for the response. Available: aiden_chen (default), andy_yu, kochi_chuang, howard_cheng, pineapple_wu.
+    When persona is set, apply the persona's tone guidelines when synthesizing your answer from the results below.
+    """
     with _lock:
         cases = list(_cases)
 
@@ -135,12 +148,19 @@ def search_knowledge(query: str) -> str:
     top = [(c, s) for c, s in scored if s > 0][:5]
 
     if not top:
-        return f"知識庫（{len(cases)} 條）找不到關於「{query}」的案例。"
+        result = f"知識庫（{len(cases)} 條）找不到關於「{query}」的案例。"
+    else:
+        parts = [f"找到 {len(top)} 條相關案例（共 {len(cases)} 條）：\n"]
+        for i, (case, _) in enumerate(top, 1):
+            parts.append(f"### {i}.\n{_fmt(case)}\n")
+        result = "\n".join(parts)
 
-    parts = [f"找到 {len(top)} 條相關案例（共 {len(cases)} 條）：\n"]
-    for i, (case, _) in enumerate(top, 1):
-        parts.append(f"### {i}.\n{_fmt(case)}\n")
-    return "\n".join(parts)
+    persona_name = persona or DEFAULT_PERSONA
+    persona_text = _load_persona(persona_name)
+    if persona_text:
+        result += f"\n\n---\n**語氣指南 (persona: {persona_name})**\n{persona_text}"
+
+    return result
 
 
 @mcp.tool()
