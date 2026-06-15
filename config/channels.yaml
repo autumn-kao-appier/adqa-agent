@@ -29,6 +29,66 @@ channels:
     description: Coupang TW squad
     active: true
 
+  - name: qa_team
+    id: GBJHZTW5R
+    description: Appier QA team information and coordination
+    active: true
+
+  - name: qa-crossx
+    id: GTF8B2QSW
+    description: CrossX QA — testing budget ROI, scalability features
+    active: true
+
+  - name: adxray
+    id: C0A8GFUAN57
+    description: AdXray 監控與調查
+    active: true
+
+  - name: aibid-core
+    id: C01TWGTHDE2
+    description: AIBid core team
+    active: true
+
+  - name: aictivate-scientist
+    id: C086GAGT06L
+    description: Aictivate scientist team
+    active: true
+
+  - name: aliexpress-ramp-up
+    id: C08P7US3SJX
+    description: AliExpress ramp-up squad
+    active: true
+
+  - name: deeplink
+    id: C098QPSKCUW
+    description: Deeplink 相關討論
+    active: true
+
+  - name: dynamic-video
+    id: C07MW4LCRUK
+    description: Dynamic video 相關討論
+    active: true
+
+  - name: kakao-creative
+    id: C03V2EV09FC
+    description: Kakao creative 相關討論
+    active: true
+
+  - name: partnership_and_ai
+    id: C06NUV6TJFR
+    description: Partnership x AI team
+    active: true
+
+  - name: partnership_and_pm
+    id: G01N3E8EKF1
+    description: Partnership x PM team
+    active: true
+
+  - name: tw_-coupang_app-re-engagement
+    id: C06NAP7NSL9
+    description: Coupang TW app re-engagement squad
+    active: true
+
 jira:
   project: ADQA
   jql_filter: "project = ADQA AND status = Done AND updated >= \"{last_distilled_at}\""

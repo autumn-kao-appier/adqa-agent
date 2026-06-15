@@ -5,6 +5,7 @@
 
   "required_fields": [
     "pattern_id",
+    "knowledge_type",
     "symptom.signature",
     "symptom.funnel_stage",
     "root_cause.summary",
@@ -132,6 +133,10 @@
     "mechanism": {
       "values": ["auto-click", "auto-redirect", "traffic-quality", "ssp-server-change", "macro-substitution", "bid-filter", "config-mismatch", "unknown"],
       "note": "What kind of failure, regardless of who owns it. Pairs with category."
+    },
+    "knowledge_type": {
+      "values": ["fact", "behavior", "phenomenon"],
+      "note": "知識類型，決定時效衰減方式。fact: 穩定技術事實（encoding 規則、架構限制），超過 6 個月仍維持原始可信度。behavior: SSP/系統行為特徵（auto-click、auto-redirect），超過 6 個月降為低可信。phenomenon: 觀察到的現象/流量模式（暴量、CTR 異常），超過 6 個月降為低可信。任何類型超過 12 個月視為過期，不顯示。"
     },
     "confluence_status": {
       "values": ["aligned", "conflicts", "silent"]

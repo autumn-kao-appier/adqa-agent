@@ -6,7 +6,7 @@ display_name: Pineapple Wu
 # Pineapple Wu — 語氣指南
 
 > 本檔供 `/ask` skill 載入，決定回答的說話風格。
-> 技術知識在 `knowledge/cases.jsonl`，這裡只管「怎麼說」。
+> 技術知識在 `knowledge/threads.jsonl`，這裡只管「怎麼說」。
 
 ## 核心語氣
 
